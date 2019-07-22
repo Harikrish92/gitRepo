@@ -21,8 +21,8 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
-      - printf '[{"name":"docker-cluster-container","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
-      - aws ecs stop-task --task $(aws ecs list-tasks --cluster $CLUSTER_NAME --service-name $CLUSTER_SERVICE_NAME --query '[taskArns]' --output text) --cluster $CLUSTER_NAME
+      - printf '[{"name":"%s","imageUri":"%s"}]' $CLUSTER_NAME-taskdefinition $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG > imagedefinitions.json
+      - aws ecs stop-task --task $(aws ecs list-tasks --cluster $CLUSTER_NAME --service-name $CLUSTER_NAME-service --query '[taskArns]' --output text) --cluster $CLUSTER_NAME
 
 artifacts:
     files: imagedefinitions.json
